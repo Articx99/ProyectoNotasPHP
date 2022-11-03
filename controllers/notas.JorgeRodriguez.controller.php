@@ -12,6 +12,79 @@ if(isset($_POST['enviar'])){
     }
 }
 
+function sanitizarInput(array $datos): array{
+    return filter_var_array($datos,FILTER_SANITIZE_SPECIAL_CHARS);
+}
+function asignaturas(array $asignaturas):array{
+    $resultado = array();  
+    $alumnos = array();
+    foreach($asignaturas as $asign => $notas){     
+        $mediaTotal = 0;
+        $aprobados = 0;
+        $suspensos = 0;        
+        $alumnoMax = "";
+        $alumnoMin = "";
+        $maximo = 0; 
+        $min = 11;
+        $contadorS = 0;
+       
+        foreach($notas as $nombre => $Anota){
+            
+            $media = 0;
+            
+            foreach($Anota as $nota){
+                $media += $nota; 
+                if($nota < 5){
+                    $contadorS++;
+                }
+                   
+                if($nota > $maximo){
+                    $maximo = $nota;
+                    $alumnoMax = $nombre;
+                }
+                if($nota < $min){
+                    $min = $nota;
+                    $alumnoMin = $nombre;
+                }
+                
+            } 
+            
+            $mediaTotal += $media / count($Anota);
+            if(($media / count($Anota)) < 5){
+                $suspensos++;
+                if(array_key_exists($nombre,$alumnos)){
+                    $alumnos[$nombre]['suspensos']++;
+                }
+                else{
+                    $alumnos[$nombre] = array('suspensos', 1);
+                }
+            }
+            else{
+                $aprobados++;
+            }
+        }
+                            
+        $resultado[$asign] = array(
+                'media' => number_format($mediaTotal/count($notas),2,',','.'),
+                'aprobados' => $aprobados,
+                'suspensos' => $suspensos,
+                'max' => array(
+                    'alumno' => $alumnoMax,
+                    'nota' => $maximo
+                ),
+                'min' => array(
+                    'alumno' => $alumnoMin,
+                    'nota' => $min
+                )
+            
+            
+        );
+    }
+    
+    
+    return array($resultado, "alumnos" => $alumnos);
+    
+}
 
 function checkForm(array $post) : array{
     $errores = [];

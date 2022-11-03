@@ -128,7 +128,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Proyecto Notas</h6>    
             <div class="card-body">
                 <!--<form action="./?sec=formulario" method="post">-->
-                <form action="./?sec=notas" method="post">
+                <form action="./?sec=notas.JorgeRodriguez" method="post">
                     
                     <div class="mb-3">
                         <label for="ej1Numeros">Inserta js</label> 
