@@ -6,6 +6,7 @@
 <!-- Content Row -->
 
 <div class="row">
+      
 
     <div class="col-12 col-16">
         
@@ -14,8 +15,8 @@
            
             if(isset($data['resultado'])){
             ?>
+
             <div class="col-12">
-                
                 <table class="table table-staped">
                     <thead>
                         <tr>
@@ -75,6 +76,7 @@
             <?php 
             foreach($data['resultado']['alumnos'] as $nombre => $arrayNotas){
                 foreach($arrayNotas as $notas => $n){
+                    
                     if($n === 0){  
                         echo "<li>$nombre</li>";
                     }
@@ -117,15 +119,11 @@
     </div>
     <?php
     }
-    ?>
-                
-                        
-            
+    ?> 
             <div
-                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                                
+                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">                                   
             </div>
-            <h6 class="m-0 font-weight-bold text-primary">Proyecto Notas</h6>    
+            <h6 class="m-0 font-weight-bold text-primary">Proyecto Notas</h6>
             <div class="card-body">
                 <!--<form action="./?sec=formulario" method="post">-->
                 <form action="./?sec=notas.JorgeRodriguez" method="post">
@@ -133,19 +131,13 @@
                     <div class="mb-3">
                         <label for="ej1Numeros">Inserta js</label> 
                         <textarea class="form-control" id="datos" type="text" name="json_notas" rows="3"><?php echo isset($data['input']['datos']) ? $data['input']['datos'] : '';?></textarea>
-                    </div>
-                    
-                    
+                    </div>                   
                     <div class="mb-3">
                         <input type="submit" value="Enviar" name="enviar" class="btn btn-primary"/>
                     </div>
                     
                 </form>
-                <p class="text-danger small"> <?php echo isset($data['errores']['datos']) ? $data['errores']['datos']: '';?></p>
-                
-                
-                    
-                    
+                <p class="text-danger small"> <?php echo isset($data['errores']['datos']) ? $data['errores']['datos']: '';?></p>          
             </div>
         </div>
     </div>
