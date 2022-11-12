@@ -81,7 +81,7 @@
             <?php 
                 foreach($data['resultado']['alumnos'] as $nombre => $suspensos){
                     foreach($suspensos as $suspensoName => $numeroSuspensos){
-                        if($numeroSuspensos <= 1){                       
+                        if($numeroSuspensos == 1){                       
                             echo "<li>$nombre</li>";
                         }
                     }
