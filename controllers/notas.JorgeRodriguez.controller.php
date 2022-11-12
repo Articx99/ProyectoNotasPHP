@@ -110,7 +110,8 @@ function checkForm(array $post) : array{
                         if(!is_array($arrayNotas)){
                             $erroresJson .= "El módulo '".htmlentitites($arrayNotas)."' no es un array de notas<br />";
                         }
-                        else{                             foreach($arrayNotas as $n){
+                        else{ 
+                            foreach($arrayNotas as $n){
                                 if(!is_float($n) && !is_int($n) && !is_array($n)){
                                     $erroresJson .= "El módulo '".htmlentities($modulo)."', el alumno '".htmlentities($nombre)."' tiene la nota '".htmlentities($n)."' que no es un int<br />";
                                 }
