@@ -1,11 +1,12 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 $data = array();
 
 $errores = array();
 if(isset($_POST['enviar'])){    
     $errores = checkForm($_POST);
     $data['errores'] = $errores;
+    $data['input'] = filter_var_array($_POST,FILTER_SANITIZE_SPECIAL_CHARS);
     if(count($errores) === 0){
         $asignaturas = json_decode($_POST['json_notas'],true);
         $data['resultado'] = asignaturas(sanitizarInput($asignaturas));
@@ -93,26 +94,36 @@ function checkForm(array $post) : array{
             $erroresJson = "";
             foreach($modulos as $modulo => $alumnos){
                 if(empty($modulo)){
-                    $erroresJson .= "El nombre del módulo no puede estar vacío<br>";
+                    $erroresJson .= "El nombre del módulo no puede estar vacío<br />";
                 }
                 if(!is_array($alumnos)){
-                    $erroresJson .= "El módulo '".htmlentities($modulo)."' no tiene un array de alumnos<br>";//Equivale a filter_var($modulo, FILTER_SANITIZE_SPECIAL_CHARS);
+                    $erroresJson .= "El módulo '".htmlentities($modulo)."' no tiene un array de alumnos<br />";
                 }
                 else{
                     foreach($alumnos as $nombre => $arrayNotas){
-                        foreach($arrayNotas as $n){
-                            if(empty($nombre)){
-                                $erroresJson .= "El módulo '".htmlentities($modulo)."' tiene un alumno sin nombre<br>";//Equivale a filter_var($modulo, FILTER_SANITIZE_SPECIAL_CHARS);
+                        if(empty($nombre)){
+                            $erroresJson .= "El módulo '".htmlentities($modulo)."' tiene un alumno sin nombre<br />";
                             }
-                            if(!is_float($n) && !is_int($n) ){
-                                $erroresJson .= "El módulo '".htmlentities($modulo)."' tiene la nota '".htmlentities($n)."' que no es un int<br>";//Equivale a filter_var($modulo, FILTER_SANITIZE_SPECIAL_CHARS);
-                            }
-                            else{
-                                if($n < 0 || $n > 10){
-                                    $erroresJson .= "Módulo '".htmlentities($modulo)."' alumno '".htmlentities($nombre)."' tiene una nota de ".$n."<br>";//Equivale a filter_var($modulo, FILTER_SANITIZE_SPECIAL_CHARS);
+                        else if(!is_string($nombre)){
+                            $erroresJson .= "El alumno : '".htmlentities($alumno)."' no es una string<br />";
+                        }
+                        if(!is_array($arrayNotas)){
+                            $erroresJson .= "El módulo '".htmlentitites($arrayNotas)."' no es un array de notas<br />";
+                        }
+                        else{                             foreach($arrayNotas as $n){
+                                if(!is_float($n) && !is_int($n) && !is_array($n)){
+                                    $erroresJson .= "El módulo '".htmlentities($modulo)."', el alumno '".htmlentities($nombre)."' tiene la nota '".htmlentities($n)."' que no es un int<br />";
                                 }
-                            }
-                        }       
+                                else{
+                                    if(is_array($n)){
+                                        $erroresJson .= "La nota '". implode(",",$n)."' en '".htmlentities($modulo)."', del alumno '".htmlentities($nombre) ."' no puede ser un array<br />";
+                                    }
+                                    else if($n < 0 || $n > 10){
+                                        $erroresJson .= "Módulo '".htmlentities($modulo)."' alumno '".htmlentities($nombre)."' tiene una nota de ".$n."<br />";
+                                    }
+                                }
+                            }   
+                        }
                     }
                 }
             }
